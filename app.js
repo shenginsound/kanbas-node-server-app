@@ -10,7 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(express.json());
 ModuleRoutes(app);
 CourseRoutes(app);
 Lab5(app);
