@@ -24,6 +24,7 @@ function CourseRoutes(app) {
         const { id } = req.params;
         Database.courses = Database.courses
           .filter((c) => c._id !== id);
+          console.log(id);
         res.sendStatus(204);
       });
     
