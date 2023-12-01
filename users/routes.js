@@ -25,7 +25,8 @@ const createUser = async (req, res) => {
   const updateUser = async (req, res) => {
     const { userId } = req.params;
     const status = await dao.updateUser(userId, req.body);
-    currentUser = await dao.findUserById(userId);
+    const currentUser = await dao.findUserById(id);
+    req.session["currentUser"] = currentUser;
     res.json(status);
   };
 
@@ -33,10 +34,12 @@ const createUser = async (req, res) => {
     const user = await dao.findUserByUsername(
       req.body.username);
     if (user) {
-      res.status(400).json(
-        { message: "Username already taken" });
+      res.sendStatus(400);
+    //   .json(
+    //     { message: "Username already taken" });
     }
-    currentUser = await dao.createUser(req.body);
+    const currentUser = await dao.createUser(req.body);
+    req.session['currentUser'] = currentUser;
     res.json(currentUser);
   };
 
@@ -48,8 +51,22 @@ const createUser = async (req, res) => {
    };
    
    const signout = (req, res) => {
-    currentUser = null;
+    try{
+        console.log("Inside signout");
+
+    req.session.destroy();
     res.json(200);
+
+    }
+    catch(error)
+    {
+        console.error('Error during sign-out:', error);
+    // Send an error response
+    res.sendStatus(500);
+    // .json({ error: 'Internal server error' });
+
+    }
+    
   };
 
   const account = async (req, res) => {res.json(req.session['currentUser']);
