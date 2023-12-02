@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
   const updateUser = async (req, res) => {
     const { userId } = req.params;
     const status = await dao.updateUser(userId, req.body);
-    const currentUser = await dao.findUserById(id);
+    const currentUser = await dao.findUserById(userId);
     req.session["currentUser"] = currentUser;
     res.json(status);
   };
@@ -45,9 +45,18 @@ const createUser = async (req, res) => {
 
   const signin = async (req, res) => {
     const { username, password } = req.body;
-    const currentUser = await dao.findUserByCredentials(username, password);
-    req.session['currentUser'] = currentUser;
-    res.json(currentUser);
+    // const currentUser = await dao.findUserByCredentials(username, password);
+    // req.session['currentUser'] = currentUser;
+    // res.json(currentUser);
+    const user = await dao.findUserByCredentials(username, password);
+    if (user) {
+      const currentUser = user;
+      req.session["currentUser"] = currentUser;
+      res.json(user);
+    } else {
+
+      res.sendStatus(403);
+    }
    };
    
    const signout = (req, res) => {
