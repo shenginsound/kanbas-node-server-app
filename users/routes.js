@@ -59,7 +59,7 @@ const createUser = async (req, res) => {
     }
    };
    
-   const signout = (req, res) => {
+   const signout = async (req, res) => {
     try{
         console.log("Inside signout");
 
@@ -78,7 +78,8 @@ const createUser = async (req, res) => {
     
   };
 
-  const account = async (req, res) => {res.json(req.session['currentUser']);
+  const account = async (req, res) => {
+    res.json(req.session['currentUser']);
   };
   app.post("/api/users", createUser);
   app.get("/api/users", findAllUsers);
